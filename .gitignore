@@ -1,0 +1,5 @@
+# ignore all pyc
+*.pyc
+
+# ignore generated exploits - WILL REMOVE LATER
+/exploits
