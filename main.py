@@ -1,6 +1,7 @@
 from tools.crawler import Crawler
 from tools.sql_injection import SQLIModule
 from tools.shell_injection import SCIModule
+from tools.open_redirect import ORModule
 
 ORIGIN = 'http://target.com'
 
@@ -18,3 +19,7 @@ if __name__ == '__main__':
     sci_module = SCIModule(ORIGIN, pages)
     sci_module.scan()
     sci_module.generate_exploits()
+
+    or_module = ORModule(ORIGIN, pages)
+    or_module.scan()
+    or_module.generate_exploits()
