@@ -10,7 +10,7 @@ EXPLOIT_CLASS = "SQL Injection"
 
 class SQLIModule:
     """
-    SQLI Module
+    SQL Injection Module
     Checks for SQLI vulnerability
     """
 

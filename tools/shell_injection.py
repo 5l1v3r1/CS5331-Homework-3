@@ -10,7 +10,7 @@ EXPLOIT_CLASS = "Shell Command Injection"
 
 class SCIModule:
     """
-    SCI Module
+    Shell Command Injection Module
     Checks for Command Injection vulnerability
     """
 
