@@ -22,41 +22,7 @@ class DTModule:
         self.url = url
         self.pages = pages
         self.logs = {}
-
-    def has_form(self, html_page):
-        return len(BeautifulSoup(html_page, parseOnlyThese=SoupStrainer('form'))) != 0
-
-    def parse_form(self, soup):
-        form = soup.find('form')
-        attributes = []
-        for form_input in form.findAll('input'):
-            attribute = ()
-            for form_input_attr in form_input.attrs:
-                if form_input_attr[0] != 'type':
-                    if form_input_attr[0] == "name":
-                        attribute = (form_input_attr[1], "")
-                    elif form_input_attr[0] == "value":
-                        attribute = (attribute[0], form_input_attr[1])
-            if len(attribute) > 0:
-                attributes.append(attribute)
-        return attributes
-
-    def create_params(self, params):
-        values = {}
-        for attr in params:
-            if attr[1] == "":
-                values[attr[0]] = "a"
-            else:
-                values[attr[0]] = attr[1]
-        return values
-
-    def post_request(self, url, params):
-        values = self.create_params(params)
-        data = urllib.urlencode(values)
-        req = urllib2.Request(url, data)
-        rsp = urllib2.urlopen(req)
-        return rsp.read()
-
+        
     def log_results(self, results, category):
         log = {}
         log["class"] = category
@@ -72,7 +38,6 @@ class DTModule:
         return log
 
     def retrieve_params(self, params):
-
         result = []
         split = params.split("&")
         for x in split:
@@ -116,6 +81,7 @@ class DTModule:
             status, response = http.request(web_page)
             parsed = urlparse(web_page)
 
+            # handle scan for get params
             if parsed.query:
                 #print("testing page: " + web_page)
                 payloads = self.prepare_params(parsed.query, 100, "etc/passwd")
