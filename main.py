@@ -2,24 +2,34 @@ from tools.crawler import Crawler
 from tools.sql_injection import SQLIModule
 from tools.shell_injection import SCIModule
 from tools.open_redirect import ORModule
+from tools.generator import ExploitGenerator
 
 ORIGIN = 'http://target.com'
 
 
 if __name__ == '__main__':
+    # CRAWL TARGET HOST
     crawler = Crawler(ORIGIN)
+    exploit_generator = ExploitGenerator()
     pages = crawler.crawl()
-    for page in pages:
-        print page
 
+    # SCAN SQL INJECTION
     sqli_module = SQLIModule(ORIGIN, pages)
     sqli_module.scan()
-    sqli_module.generate_exploits()
+    exploit_generator.generate(sqli_module.logs)
 
-    sci_module = SCIModule(ORIGIN, pages)
-    sci_module.scan()
-    sci_module.generate_exploits()
+    # SCAN SERVER SIDE CODE INJECTION
 
+    # SCAN DIRECTORY TRAVERSAL 
+
+    # SCAN OPEN REDIRECT
     or_module = ORModule(ORIGIN, pages)
     or_module.scan()
-    or_module.generate_exploits()
+    exploit_generator.generate(or_module.logs)
+
+    # SCAN CSRF
+
+    # SCAN SHELL CODE INJECTION
+    sci_module = SCIModule(ORIGIN, pages)
+    sci_module.scan()
+    exploit_generator.generate(sci_module.logs)

@@ -1,11 +1,11 @@
 import httplib2
 from urlparse import urljoin, urlparse
-from helper import has_form, parse_form, post_request, create_params
+from helper import has_form, parse_form, post_request, create_post_params
 from sets import Set
 
 EXPLOIT_PATH = "exploits/"
 EXPLOIT_TYPE = "sci"
-EXPLOIT_CLASS = "Shell Command Injection"
+EXPLOIT_CLASS = "Command Injection"
 
 
 class SCIModule:
@@ -14,9 +14,9 @@ class SCIModule:
     Checks for Command Injection vulnerability
     """
 
-    def __init__(self, url, pages):
+    def __init__(self, url, web_pages):
         self.url = url
-        self.pages = pages
+        self.web_pages = web_pages
         self.logs = {}
 
     def log_results(self, results, category):
@@ -59,7 +59,7 @@ class SCIModule:
 
     def scan(self):
         results = []
-        for web_page in self.pages:
+        for web_page in self.web_pages:
             http = httplib2.Http()
             status, response = http.request(web_page)
             if has_form(response):
@@ -70,8 +70,8 @@ class SCIModule:
                     if form_input[0] == "csrftoken": # We don't have incentive to change this
                         injection_forms.append(form_input)
                     else:
-                        injection_forms.append((form_input[0], "; cat /etc/passwd"))
+                        injection_forms.append((form_input[0], "; uname -a"))
                 new_response = post_request(web_page, injection_forms)
                 if original_response != new_response: # That means that the webpage is different, possibly a successful case
-                    results.append((urlparse(web_page).path, create_params(injection_forms), "POST"))
+                    results.append((urlparse(web_page).path, create_post_params(injection_forms), "POST"))
         self.logs = self.log_results(results, EXPLOIT_CLASS)

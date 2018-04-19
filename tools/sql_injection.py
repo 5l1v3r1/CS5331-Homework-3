@@ -1,6 +1,6 @@
 import httplib2
 from urlparse import urljoin, urlparse
-from helper import has_form, parse_form, post_request, create_params
+from helper import has_form, parse_form, post_request, create_post_params
 from sets import Set
 
 EXPLOIT_PATH = "exploits/"
@@ -73,5 +73,5 @@ class SQLIModule:
                         injection_forms.append((form_input[0], "' or '1'='1"))
                 new_response = post_request(web_page, injection_forms)
                 if original_response != new_response: # That means that the webpage is different, possibly a successful case
-                    results.append((urlparse(web_page).path, create_params(injection_forms), "POST"))
+                    results.append((urlparse(web_page).path, create_post_params(injection_forms), "POST"))
         self.logs = self.log_results(results, EXPLOIT_CLASS)

@@ -1,3 +1,6 @@
+# helper.py
+# generic GET and POST queries
+
 import urllib, urllib2
 from BeautifulSoup import BeautifulSoup, SoupStrainer
 
@@ -20,7 +23,7 @@ def parse_form(html_page):
             attributes.append(attribute)
     return attributes
 
-def create_params(params):
+def create_post_params(params):
     values = {}
     for attr in params:
         if attr[1] == "":
@@ -29,8 +32,19 @@ def create_params(params):
             values[attr[0]] = attr[1]
     return values
 
+def create_get_params(url):
+    values = {}
+    params = url.split("?")[1].split("&")
+    for param in params:
+        attr = param.split("=")
+        if attr[1] == "":
+            values[attr[0]] = "a"
+        else:
+            values[attr[0]] = attr[1]
+    return values
+
 def post_request(url, params):
-    values = create_params(params)
+    values = create_post_params(params)
     data = urllib.urlencode(values)
     req = urllib2.Request(url, data)
     rsp = urllib2.urlopen(req)

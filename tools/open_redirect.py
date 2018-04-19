@@ -1,6 +1,7 @@
 import httplib2, urllib, urllib2
 from BeautifulSoup import BeautifulSoup, SoupStrainer
 from urlparse import urljoin, urlparse
+from helper import has_form, parse_form, post_request, create_get_params
 from sets import Set
 
 EXPLOIT_PATH = "exploits/"
@@ -39,7 +40,7 @@ class ORModule:
             params = url_param[1].split("&")
             for x in xrange(len(params)):
                 param = params[x]
-                new_param = param.split("=")[0] + "=" + "http://www.google.com"
+                new_param = param.split("=")[0] + "=" + "https://status.github.com/messages"
                 params[x] = new_param
             return url.split("?")[0] + "?" + "&".join(params)
         else:
@@ -85,5 +86,5 @@ class ORModule:
             new_page = self.replace_parameters(web_page)
             new_response, new_content = http.request(new_page)
             if not self.same_origin(response['content-location'], new_response['content-location']):
-                results.append((new_page, {}, "GET"))
+                results.append((urlparse(new_page).path, create_get_params(new_page), "GET"))
         self.logs = self.log_results(results, EXPLOIT_CLASS)
