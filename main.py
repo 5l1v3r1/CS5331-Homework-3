@@ -2,6 +2,7 @@ from tools.crawler import Crawler
 from tools.sql_injection import SQLIModule
 from tools.shell_injection import SCIModule
 from tools.open_redirect import ORModule
+from tools.directory_traversal import DTModule
 from tools.generator import ExploitGenerator
 
 ORIGIN = 'http://target.com'
@@ -20,7 +21,10 @@ if __name__ == '__main__':
 
     # SCAN SERVER SIDE CODE INJECTION
 
-    # SCAN DIRECTORY TRAVERSAL 
+    # SCAN DIRECTORY TRAVERSAL
+    dt_module = DTModule(ORIGIN, pages)
+    dt_module.scan()
+    exploit_generator.generate(dt_module.logs)
 
     # SCAN OPEN REDIRECT
     or_module = ORModule(ORIGIN, pages)
@@ -33,3 +37,5 @@ if __name__ == '__main__':
     sci_module = SCIModule(ORIGIN, pages)
     sci_module.scan()
     exploit_generator.generate(sci_module.logs)
+
+
