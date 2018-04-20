@@ -4,7 +4,7 @@ from generator import ExploitGenerator
 import httplib2, urllib, urllib2
 from BeautifulSoup import BeautifulSoup, SoupStrainer
 from urlparse import urljoin, urlparse
-from helper import has_form, parse_form, post_request, create_get_params, create_post_params
+from helper import has_form, parse_form, get_form_action, post_request, create_get_params, create_post_params
 from sets import Set
 
 EXPLOIT_PATH = "exploits/"
@@ -106,6 +106,11 @@ class DTModule:
             # handle scan for post php forms
             if has_form(response):
                 forms = parse_form(response)
+                action = get_form_action(response)
+
+                if action != None:
+                    web_page = web_page.rsplit('/', 1)[0] + "/" + action
+
                 original_response = post_request(web_page, forms)
                 injection_forms = []
                 paths = self.prepare_paths(30, "etc/passwd")

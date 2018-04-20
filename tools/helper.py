@@ -7,9 +7,15 @@ from BeautifulSoup import BeautifulSoup, SoupStrainer
 def has_form(html_page):
     return len(BeautifulSoup(html_page, parseOnlyThese=SoupStrainer('form'))) != 0
 
+def get_form_action(html_page):
+    soup = BeautifulSoup(html_page)
+    form = soup.find('form')
+    return soup.find('form').get('action')
+
 def parse_form(html_page):
     soup = BeautifulSoup(html_page)
     form = soup.find('form')
+    
     attributes = []
     for form_input in form.findAll('input'):
         attribute = ()
