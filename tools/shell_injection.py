@@ -70,7 +70,7 @@ class SCIModule:
                     if form_input[0] == "csrftoken": # We don't have incentive to change this
                         injection_forms.append(form_input)
                     else:
-                        injection_forms.append((form_input[0], "; uname -a"))
+                        injection_forms.append((form_input[0], "| uname -a"))
                 new_response = post_request(web_page, injection_forms)
                 if original_response != new_response: # That means that the webpage is different, possibly a successful case
                     results.append((urlparse(web_page).path, create_post_params(injection_forms), "POST"))
