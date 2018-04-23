@@ -143,10 +143,12 @@ class DTModule:
 
                 for path in paths:
                     for form_input in forms:
-                        injection_forms.append((form_input[0], path))
+                        injection_forms.append((form_input[0], "| cat " + path))
 
                     new_response = post_request(web_page, injection_forms)
-                    if len(new_response) > len(original_response): # That means that the webpage is different, possibly a successful case
+                    parsed_response = new_response.splitlines()
+                    #if len(new_response) > len(original_response): # That means that the webpage is different, possibly a successful case
+                    if self.has_passwd_content(parsed_response):
                         results.append((urlparse(web_page).path, create_post_params(injection_forms), "POST"))
                         break
 
