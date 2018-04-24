@@ -88,7 +88,7 @@ class SQLIModule:
                     if original_response != new_response and new_response != random_response: # That means that the webpage is different, possibly a successful case
                         results.append((urlparse(web_page).path, create_post_params(injection_forms), "POST"))
                         break
-            # elif self.has_get_params(web_page) an9d urlparse(web_page).path not in get_param_pages:
+            # elif self.has_get_params(web_page) and urlparse(web_page).path not in get_param_pages:
                 # GET version
 
 
