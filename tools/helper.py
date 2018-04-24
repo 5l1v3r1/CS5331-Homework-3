@@ -25,7 +25,7 @@ def parse_form(html_page):
                 if form_input_attr[0] != 'type':
                     if form_input_attr[0] == "name":
                         attribute = (form_input_attr[1], "")
-                    elif form_input_attr[0] == "value":
+                    elif form_input_attr[0] == "value" and len(attribute) != 0:
                         attribute = (attribute[0], form_input_attr[1], current_form_input_type)
                         current_form_input_type = ""
                 elif form_input_attr[0][1] != 'submit':
