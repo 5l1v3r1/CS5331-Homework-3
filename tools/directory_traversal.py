@@ -1,6 +1,3 @@
-from crawler import Crawler
-from generator import ExploitGenerator
-
 import httplib2, urllib, urllib2, requests
 from BeautifulSoup import BeautifulSoup, SoupStrainer
 from urlparse import urljoin, urlparse

@@ -39,7 +39,7 @@ class SCIModule:
                     if form_input[0] == "csrftoken": # We don't have incentive to change this
                         injection_forms.append(form_input)
                     else:
-                        injection_forms.append((form_input[0], "; uname -a"))
+                        injection_forms.append((form_input[0], "| uname -a"))
                 new_response = post_request(web_page, injection_forms)
                 parsed_response = new_response.splitlines()
                 if self.has_uname_content(parsed_response):

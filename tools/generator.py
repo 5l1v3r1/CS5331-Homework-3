@@ -24,7 +24,7 @@ class ExploitGenerator:
 	{
 	   "class":"SQL Injection",
 	   "results":{
-	   		"https://target.com":[
+	   		"http://target.com":[
 	        	{
             		"endpoint":"/search",
             		"params":{
@@ -53,6 +53,7 @@ class ExploitGenerator:
 			json.dump(logs, fp, indent=4)
 
 	def generate(self, logs):
+		print logs
 		exploit_type = EXPLOIT_CLASS[logs["class"]]
 
 		self.write_to_json(exploit_type, logs)
