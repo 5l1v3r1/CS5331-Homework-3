@@ -39,7 +39,6 @@ class ScrapyCrawler(scrapy.Spider):
         # Check that url is not visited yet
         if self.same_origin(next_url, self.origin) and next_url not in VISITED:
           VISITED.add(next_url)
-          print len(VISITED)
           yield scrapy.Request(next_url, cookies={}, callback=self.parse)
 
   # def closed(self, reason):
