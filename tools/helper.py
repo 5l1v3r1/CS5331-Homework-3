@@ -2,6 +2,7 @@
 # generic GET and POST queries
 
 import urllib, urllib2
+from urlparse import urlparse
 from BeautifulSoup import BeautifulSoup, SoupStrainer
 
 def has_form(html_page):
@@ -32,6 +33,9 @@ def parse_form(html_page):
         if len(attribute) > 0:
             attributes.append(attribute)
     return attributes
+
+def has_get_params(web_page):
+    return urlparse(web_page).query != ""
 
 def create_post_params(params):
     values = {}

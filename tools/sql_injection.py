@@ -2,7 +2,7 @@ import httplib2
 import itertools
 import urllib
 from urlparse import urljoin, urlparse
-from helper import has_form, parse_form, post_request, get_request, create_post_params, create_get_params, log_results
+from helper import has_form, parse_form, post_request, get_request, create_post_params, create_get_params, log_results, has_get_params
 from sets import Set
 
 EXPLOIT_PATH = "exploits/"
@@ -21,9 +21,6 @@ class SQLIModule:
         self.url = url
         self.pages = pages
         self.logs = {}
-
-    def has_get_params(self, web_page):
-        return urlparse(web_page).query != ""
 
     # def craft_injection_form(self, forms):
     #     modifiable_form_input = []
@@ -63,7 +60,7 @@ class SQLIModule:
                     if original_response != new_response and new_response != random_response: # That means that the webpage is different, possibly a successful case
                         results.append((urlparse(web_page).path, create_post_params(malicious_forms), "POST"))
                         break
-            elif self.has_get_params(web_page) and urlparse(web_page).path not in get_param_pages:
+            elif has_get_params(web_page) and urlparse(web_page).path not in get_param_pages:
                 # GET version
                 parsed_web_page = urlparse(web_page)
                 get_param_pages.add(parsed_web_page.path)
@@ -83,6 +80,6 @@ class SQLIModule:
                     malicious_url = parsed_web_page.scheme  + "://" + parsed_web_page.netloc + parsed_web_page.path + malicious_param_query
                     malicious_response = get_request(malicious_url)
                     if malicious_response != original_response and malicious_response != random_response: # That means that the webpage is different, possibly a successful case
-                        results.append((urlparse(web_page).path, create_get_params(malicious_params), "GET"))
+                        results.append((urlparse(web_page).path, create_get_params(malicious_url), "GET"))
 
         self.logs = log_results(self.url, results, EXPLOIT_CLASS)
