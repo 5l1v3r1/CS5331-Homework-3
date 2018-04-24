@@ -50,11 +50,13 @@ class ScrapyCrawler(scrapy.Spider):
   #     print>>links_file, found_link
 
 if __name__ == '__main__':
+  # INIT SPIDER PROCESS
   scrapy_crawler = ScrapyCrawler()
   process = CrawlerProcess()
   process.crawl(scrapy_crawler)
   process.start()
 
+  # CLEAN UP GLOBAL VAR VISITED
   pages = list(VISITED)
   pages.sort()
   exploit_generator = ExploitGenerator()
