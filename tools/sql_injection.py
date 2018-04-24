@@ -20,29 +20,6 @@ class SQLIModule:
         self.pages = pages
         self.logs = {}
 
-    def generate_exploits(self):
-        counter = 0
-        for target in self.logs["results"]:
-            for vuln in self.logs["results"][target]:
-                fp = open(EXPLOIT_PATH + EXPLOIT_TYPE + str(counter) + ".py", "w")
-                fp.write("import urllib, urllib2, cookielib, webbrowser, os\n")
-                endpoint = target + vuln["endpoint"]
-                if vuln["method"] == "POST":
-                   fp.write('url = "'+endpoint+'"\n')
-                   fp.write('values = '+str(vuln["params"])+'\n')
-                   fp.write('data = urllib.urlencode(values)\n')
-                   fp.write('req = urllib2.Request(url, data)\n')
-                   fp.write('rsp = urllib2.urlopen(req)\n')
-                   fp.write('content = rsp.read()\n')
-                   fp.write('tmp_file = "/tmp/tmp.html"\n')
-                   fp.write('fp = open(tmp_file, "w")\n')
-                   fp.write('fp.write(content)\n')
-                   fp.write('fp.close()\n')
-                   fp.write('webbrowser.open("file://" + os.path.realpath(tmp_file))\n')
-                # elif vuln["method"] == "GET":
-                    # TODO: Finish this part
-                fp.close()
-                counter += 1
     def has_get_params(self, web_page):
         return urlparse(web_page).path != ""
 
