@@ -3,3 +3,6 @@
 
 # ignore generated exploits - WILL REMOVE LATER
 /exploits
+
+# ignore generated logs - WILL REMOVE LATER
+/logs

@@ -1,6 +1,9 @@
 # generator.py
 # generate exploit scripts
 
+import json
+
+LOGS_PATH = "logs/"
 EXPLOIT_PATH = "exploits/"
 EXPLOIT_CLASS = {
 	"SQL Injection": "sqli",
@@ -45,8 +48,14 @@ class ExploitGenerator:
 			params_str.append("{}={}".format(key, value))
 		return "{}?{}".format(url, "&".join(params_str))
 
+	def write_to_json(self, exploit_class, logs):
+		with open("{}{}.json".format(LOGS_PATH, exploit_class), 'w') as fp:
+			json.dump(logs, fp, indent=4)
+
 	def generate(self, logs):
 		exploit_type = EXPLOIT_CLASS[logs["class"]]
+
+		self.write_to_json(exploit_type, logs)
 
 		for host, exploits in logs["results"].items():
 			for exploit in exploits:
