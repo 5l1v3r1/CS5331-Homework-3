@@ -36,4 +36,9 @@ if __name__ == '__main__':
     crawl(ORIGIN, ORIGIN)
     results = list(visited)
     results.sort()
+
+    links_file = open('links.txt', 'w')
+    for found_link in pages:
+        print>>links_file, found_link
+
     print(results)

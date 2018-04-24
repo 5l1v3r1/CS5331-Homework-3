@@ -11,14 +11,25 @@ from tools.open_redirect import ORModule
 from tools.directory_traversal import DTModule
 from tools.generator import ExploitGenerator
 
-ORIGIN = 'http://ec2-52-221-238-102.ap-southeast-1.compute.amazonaws.com:8080'
+from scrapy.utils.project import get_project_settings
+
+ORIGIN = 'http://ec2-52-221-238-102.ap-southeast-1.compute.amazonaws.com:8081/secretclub.php'
 VISITED = Set([ORIGIN])
 
 class ScrapyCrawler(scrapy.Spider):
   name = "ScrapyCrawler"
-  custom_settings = {
-    'DOWNLOAD_DELAY': 1,
-  }
+  # custom_settings = {
+  #   'DOWNLOADER_MIDDLEWARES': {
+  #     'scrapy_splash.SplashCookiesMiddleware': '723',
+  #     'scrapy_splash.SplashMiddleware': '725',
+  #     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': '810',
+  #     'scrapy.downloadermiddlewares.cookies.CookiesMiddleware'
+  #   }
+  # }
+
+  # settings = get_project_settings()
+  # print settings
+
 
   def __init__(self):
     self.origin = ORIGIN
@@ -43,8 +54,8 @@ class ScrapyCrawler(scrapy.Spider):
         # Check that url is not visited yet
         if self.same_origin(next_url, self.origin) and next_url not in VISITED:
           VISITED.add(next_url)
-          yield scrapy.Request(next_url, cookies={'PHPSESSID': 'llg4baun13g5mf09kau8cms5p5'}, callback=self.parse)
-          #yield SplashRequest(next_url, cookies={}, callback=self.parse, args={'wait': 10})
+          #yield scrapy.Request(next_url, cookies={'PHPSESSID': 'llg4baun13g5mf09kau8cms5p5'}, callback=self.parse)
+          yield SplashRequest(next_url, cookies={'PHPSESSID': 'llg4baun13g5mf09kau8cms5p5'}, callback=self.parse, args={'wait': 0.5})
 
   # def closed(self, reason):
     # links_file = open('test.txt', 'w')
