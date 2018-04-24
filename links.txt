@@ -1,0 +1,12 @@
+http://ec2-52-221-238-102.ap-southeast-1.compute.amazonaws.com:8080
+http://ec2-52-221-238-102.ap-southeast-1.compute.amazonaws.com:8080/
+http://ec2-52-221-238-102.ap-southeast-1.compute.amazonaws.com:8080/about.php
+http://ec2-52-221-238-102.ap-southeast-1.compute.amazonaws.com:8080/adventure/
+http://ec2-52-221-238-102.ap-southeast-1.compute.amazonaws.com:8080/random.php
+http://ec2-52-221-238-102.ap-southeast-1.compute.amazonaws.com:8080/selections.php
+http://ec2-52-221-238-102.ap-southeast-1.compute.amazonaws.com:8080/selections.php?artist=Mazzy Star
+http://ec2-52-221-238-102.ap-southeast-1.compute.amazonaws.com:8080/selections.php?artist=Nicole Dollanganger
+http://ec2-52-221-238-102.ap-southeast-1.compute.amazonaws.com:8080/selections.php?artist=Slowdive
+http://ec2-52-221-238-102.ap-southeast-1.compute.amazonaws.com:8080/selections.php?year=1993
+http://ec2-52-221-238-102.ap-southeast-1.compute.amazonaws.com:8080/selections.php?year=2016
+http://ec2-52-221-238-102.ap-southeast-1.compute.amazonaws.com:8080/selections.php?year=2017
