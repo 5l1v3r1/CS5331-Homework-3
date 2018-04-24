@@ -1,2 +1,4 @@
 httplib2
 BeautifulSoup
+requests
+scrapy
