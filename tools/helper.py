@@ -53,6 +53,16 @@ def create_get_params(url):
             values[attr[0]] = attr[1]
     return values
 
+def get_request(url):
+    result = ""
+    try:
+        req = urllib2.Request(url)
+        rsp = urllib2.urlopen(req)
+        result = rsp.read()
+    except:
+        result = ""
+    return result
+
 def post_request(url, params):
     values = create_post_params(params)
     data = urllib.urlencode(values)
