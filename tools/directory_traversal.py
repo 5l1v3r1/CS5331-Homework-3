@@ -138,4 +138,4 @@ class DTModule:
                         results.append((urlparse(web_page).path, create_post_params(injection_forms), "POST"))
                         break
 
-        self.logs = log_results(url, results, EXPLOIT_CLASS)
+        self.logs = log_results(self.url, results, EXPLOIT_CLASS)
