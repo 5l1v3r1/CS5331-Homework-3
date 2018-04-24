@@ -73,4 +73,4 @@ class ORModule:
             new_response, new_content = http.request(new_page)
             if not self.same_origin(response['content-location'], new_response['content-location']):
                 results.append((urlparse(new_page).path, create_get_params(new_page), "GET"))
-        self.logs = log_results(results, EXPLOIT_CLASS)
+        self.logs = log_results(self.url, results, EXPLOIT_CLASS)

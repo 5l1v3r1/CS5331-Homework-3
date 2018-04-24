@@ -60,4 +60,4 @@ class SCIModule:
                 new_response = post_request(web_page, injection_forms)
                 if original_response != new_response: # That means that the webpage is different, possibly a successful case
                     results.append((urlparse(web_page).path, create_post_params(injection_forms), "POST"))
-        self.logs = log_results(results, EXPLOIT_CLASS)
+        self.logs = log_results(url, results, EXPLOIT_CLASS)
