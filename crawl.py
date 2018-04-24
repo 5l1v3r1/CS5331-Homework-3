@@ -10,7 +10,7 @@ from tools.open_redirect import ORModule
 from tools.directory_traversal import DTModule
 from tools.generator import ExploitGenerator
 
-ORIGIN = 'http://target.com'
+ORIGIN = 'http://ec2-52-221-238-102.ap-southeast-1.compute.amazonaws.com:8081/'
 VISITED = Set([ORIGIN])
 
 class ScrapyCrawler(scrapy.Spider):
