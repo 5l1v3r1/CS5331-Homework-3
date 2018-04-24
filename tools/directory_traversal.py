@@ -4,7 +4,7 @@ from generator import ExploitGenerator
 import httplib2, urllib, urllib2
 from BeautifulSoup import BeautifulSoup, SoupStrainer
 from urlparse import urljoin, urlparse
-from helper import has_form, parse_form, get_form_action, post_request, create_get_params, create_post_params
+from helper import has_form, parse_form, get_form_action, post_request, create_get_params, create_post_params, log_results
 from sets import Set
 
 EXPLOIT_PATH = "exploits/"
@@ -22,20 +22,6 @@ class DTModule:
         self.url = url
         self.pages = pages
         self.logs = {}
-        
-    def log_results(self, results, category):
-        log = {}
-        log["class"] = category
-        log["results"] = {}
-        processed_results = []
-        for result in results:
-            processed_result = {}
-            processed_result["endpoint"] = result[0]
-            processed_result["params"] = result[1]
-            processed_result["method"] = result[2]
-            processed_results.append(processed_result)
-        log["results"][self.url] = processed_results
-        return log
 
     def retrieve_params(self, params):
         result = []
@@ -124,4 +110,4 @@ class DTModule:
                         results.append((urlparse(web_page).path, create_post_params(injection_forms), "POST"))
                         break
           
-        self.logs = self.log_results(results, EXPLOIT_CLASS)
+        self.logs = log_results(results, EXPLOIT_CLASS)

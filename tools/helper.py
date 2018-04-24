@@ -55,3 +55,17 @@ def post_request(url, params):
     req = urllib2.Request(url, data)
     rsp = urllib2.urlopen(req)
     return rsp.read()
+
+def log_results(self, results, category):
+    log = {}
+    log["class"] = category
+    log["results"] = {}
+    processed_results = []
+    for result in results:
+        processed_result = {}
+        processed_result["endpoint"] = result[0]
+        processed_result["params"] = result[1]
+        processed_result["method"] = result[2]
+        processed_results.append(processed_result)
+    log["results"][self.url] = processed_results
+    return log

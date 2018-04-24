@@ -1,7 +1,7 @@
 import httplib2, urllib, urllib2
 from BeautifulSoup import BeautifulSoup, SoupStrainer
 from urlparse import urljoin, urlparse
-from helper import has_form, parse_form, post_request, create_get_params
+from helper import has_form, parse_form, post_request, create_get_params, log_results
 from sets import Set
 
 EXPLOIT_PATH = "exploits/"
@@ -19,20 +19,6 @@ class ORModule:
         self.url = url
         self.pages = pages
         self.logs = {}
-
-    def log_results(self, results, category):
-        log = {}
-        log["class"] = category
-        log["results"] = {}
-        processed_results = []
-        for result in results:
-            processed_result = {}
-            processed_result["endpoint"] = result[0]
-            processed_result["params"] = result[1]
-            processed_result["method"] = result[2]
-            processed_results.append(processed_result)
-        log["results"][self.url] = processed_results
-        return log
 
     def replace_parameters(self, url):
         url_param = url.split("?")
@@ -87,4 +73,4 @@ class ORModule:
             new_response, new_content = http.request(new_page)
             if not self.same_origin(response['content-location'], new_response['content-location']):
                 results.append((urlparse(new_page).path, create_get_params(new_page), "GET"))
-        self.logs = self.log_results(results, EXPLOIT_CLASS)
+        self.logs = log_results(results, EXPLOIT_CLASS)
