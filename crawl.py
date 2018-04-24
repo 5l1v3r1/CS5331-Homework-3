@@ -11,7 +11,7 @@ from tools.directory_traversal import DTModule
 from tools.generator import ExploitGenerator
 
 ORIGIN = 'http://target.com'
-VISITED = Set([])
+VISITED = Set([ORIGIN])
 
 class ScrapyCrawler(scrapy.Spider):
   name = "ScrapyCrawler"
@@ -19,7 +19,6 @@ class ScrapyCrawler(scrapy.Spider):
   def __init__(self):
     self.origin = ORIGIN
     self.start_urls = [self.origin]
-    self.visited = Set([])
 
   def same_origin(self, url1, url2):
     first_url = urlparse(url1)
@@ -29,18 +28,26 @@ class ScrapyCrawler(scrapy.Spider):
   def parse(self, response):
     SELECTOR = 'a'
 
+    current_origin = response.request.url
     urls = response.css('a::attr(href)').extract()
 
     for next_url in urls:
       # IF next_url exists
       if next_url is not None:
-        next_url = urljoin(self.origin, next_url)
+        next_url = urljoin(current_origin, next_url)
 
         # Check that url is not visited yet
         if self.same_origin(next_url, self.origin) and next_url not in VISITED:
           VISITED.add(next_url)
           print len(VISITED)
-          yield scrapy.Request(next_url, callback=self.parse)
+          yield scrapy.Request(next_url, cookies={}, callback=self.parse)
+
+  # def closed(self, reason):
+  #   links_file = open('test.txt', 'w')
+  #   links = list(VISITED)
+  #   links.sort()
+  #   for found_link in links:
+  #     print>>links_file, found_link
 
 if __name__ == '__main__':
   scrapy_crawler = ScrapyCrawler()
